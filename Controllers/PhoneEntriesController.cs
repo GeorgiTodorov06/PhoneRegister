@@ -59,8 +59,17 @@ namespace PhoneRegister.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ContactName,ContactNumber,LastCallDate,PhoneListId")] PhoneEntry phoneEntry)
         {
-            
-                _context.Add(phoneEntry);
+            if (!phoneEntry.ContactNumber.All(char.IsDigit) || int.Parse(phoneEntry.ContactNumber) < 0)
+            {
+                return NotFound();
+            }
+
+            if (phoneEntry.LastCallDate > DateTime.Now)
+            {
+                return NotFound();
+            }
+
+            _context.Add(phoneEntry);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             
@@ -96,9 +105,17 @@ namespace PhoneRegister.Controllers
             {
                 return NotFound();
             }
+            if (!phoneEntry.ContactNumber.All(char.IsDigit) || int.Parse(phoneEntry.ContactNumber) < 0)
+            {
+                return NotFound();
+            }
 
-            
-                try
+            if (phoneEntry.LastCallDate > DateTime.Now)
+            {
+                return NotFound();
+            }
+
+            try
                 {
                     _context.Update(phoneEntry);
                     await _context.SaveChangesAsync();
