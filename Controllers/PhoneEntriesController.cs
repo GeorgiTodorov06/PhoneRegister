@@ -48,7 +48,12 @@ namespace PhoneRegister.Controllers
         // GET: PhoneEntries/Create
         public IActionResult Create()
         {
-            ViewData["PhoneListId"] = new SelectList(_context.PhoneLists, "Id", "Id");
+            var phoneLists = _context.PhoneLists.Select(pl => new {
+                pl.Id,
+                DisplayName = "Name: " + pl.Name + " ,Id: " + pl.Id
+            }).ToList();
+
+            ViewBag.PhoneListId = new SelectList(phoneLists, "Id", "DisplayName");
             return View();
         }
 
@@ -90,8 +95,13 @@ namespace PhoneRegister.Controllers
             {
                 return NotFound();
             }
-            ViewData["PhoneListId"] = new SelectList(_context.PhoneLists, "Id", "Id", phoneEntry.PhoneListId);
-            return View(phoneEntry);
+            var phoneLists = _context.PhoneLists.Select(pl => new {
+                pl.Id,
+                DisplayName = "Name: " + pl.Name + " ,Id: " + pl.Id
+            }).ToList();
+
+            ViewBag.PhoneListId = new SelectList(phoneLists, "Id", "DisplayName");
+            return View();
         }
 
         // POST: PhoneEntries/Edit/5
