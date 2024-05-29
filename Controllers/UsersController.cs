@@ -58,7 +58,7 @@ namespace PhoneRegister.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,PhoneNumber")] User user)
         {
-            if (!user.PhoneNumber.All(char.IsDigit) || int.Parse(user.PhoneNumber) < 0)
+            if (!user.PhoneNumber.All(char.IsDigit) || int.Parse(user.PhoneNumber) < 0) 
             {
                 return NotFound();
             }
